@@ -13,7 +13,17 @@ def investment():
     investment = float(request.args.get("investment", 100))
 
     # ---- Force a clean column structure ----
-    data = yf.download(symbol, start=start_date, progress=False, auto_adjust=False, group_by="ticker")
+    data = yf.download(
+    tickers=symbol,
+    start=start_date,
+    end=None,
+    progress=False,
+    auto_adjust=False,
+    group_by="ticker",
+    threads=False
+)
+    print("Columns returned from yfinance:", list(data.columns))
+
     if data.empty:
         return jsonify({"error": f"No data for {symbol}"}), 400
 
