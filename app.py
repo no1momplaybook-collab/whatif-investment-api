@@ -68,5 +68,31 @@ def investment():
         "return_pct": round(pct_change, 2)
     })
 
+@app.route("/api/history")
+def api_history():
+    try:
+        symbol = request.args.get("symbol", "AAPL").upper()
+        start_date = request.args.get("start_date", "2024-01-01")
+
+        # Download actual price history from Yahoo
+        data = yf.download(symbol, start=start_date, end=None, interval="1mo", progress=False)
+
+        if data.empty:
+            return jsonify({"error": f"No data for {symbol}"}), 404
+
+        # Convert the data to lists of dates and closing prices
+        dates = [d.strftime("%Y-%m-%d") for d in data.index]
+        prices = [round(p, 2) for p in data["Close"]]
+
+        return jsonify({
+            "symbol": symbol,
+            "start_date": start_date,
+            "dates": dates,
+            "prices": prices
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    
 if __name__ == "__main__":
     app.run(debug=True)
