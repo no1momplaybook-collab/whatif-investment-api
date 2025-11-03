@@ -5,8 +5,7 @@ import pandas as pd
 
 app = Flask(__name__)
 from flask_cors import CORS
-CORS(app, resources={r"/*": {"origins": ["https://aimomassistant.com/", "https://www.aimomassistant.com"]}})
-
+CORS(app)
 
 @app.route("/api/investment")
 def investment():
