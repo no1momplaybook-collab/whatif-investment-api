@@ -4,7 +4,9 @@ import yfinance as yf
 import pandas as pd
 
 app = Flask(__name__)
-CORS(app)
+from flask_cors import CORS
+CORS(app, resources={r"/*": {"origins": ["https://aimomassistant.com/", "https://www.aimomassistant.com"]}})
+
 
 @app.route("/api/investment")
 def investment():
